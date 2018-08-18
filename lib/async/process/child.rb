@@ -24,7 +24,7 @@ module Async
 	module Process
 		class Child
 			def initialize(*args)
-				# Setup a cross-thread notification pipe - nio4r can't monitor pids unfortunately.
+				# Setup a cross-thread notification pipe - nio4r can't monitor pids unfortunately:
 				pipe = ::IO.pipe
 				@input = Async::IO::Generic.new(pipe.first)
 				@output = pipe.last
@@ -34,21 +34,34 @@ module Async
 				
 				@thread = Thread.new do
 					_, @exit_status = ::Process.wait2(@pid)
-					@output.write(".")
+					@output.close
 				end
 			end
 
 			def wait
-				unless @exit_status
-					@input.read(1)
-					@thread.join
-					
-					# We are done with the nofication pipe:
-					@input.close
-					@output.close
+				if @exit_status.nil?
+					wait_thread
 				end
 				
 				return @exit_status
+			end
+			
+			private
+			
+			def wait_thread
+				@input.read(1)
+				
+			ensure
+				if @exit_status.nil?
+					::Process.kill(:TERM, @pid)
+					@exit_status = false
+				end
+				
+				@thread.join
+				
+				# We are done with the notification pipe:
+				@input.close
+				@output.close
 			end
 		end
 	end
