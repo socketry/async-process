@@ -18,55 +18,24 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'async/io/generic'
+require 'async/process'
 
-module Async
-	module Process
-		class Child
-			def initialize(*args)
-				# Setup a cross-thread notification pipe - nio4r can't monitor pids unfortunately:
-				pipe = ::IO.pipe
-				@input = Async::IO::Generic.new(pipe.first)
-				@output = pipe.last
-				
-				@exit_status = nil
-				@pid = ::Process.spawn(*args)
-				
-				@thread = Thread.new do
-					_, @exit_status = ::Process.wait2(@pid)
-					@output.close
-				end
-			end
+RSpec.describe Async::Process::Child do
+	include_context Async::RSpec::Reactor
+	
+	it "will terminate sub-process when stopping task" do
+		child = nil
+		
+		task = reactor.async do
+			child = described_class.new("sleep 60")
 			
-			def running?
-				@exit_status.nil?
-			end
-			
-			def wait
-				if @exit_status.nil?
-					wait_thread
-				end
-				
-				return @exit_status
-			end
-			
-			private
-			
-			def wait_thread
-				@input.read(1)
-				
-			ensure
-				# If the user stops this task, we kill the process:
-				if @exit_status.nil?
-					::Process.kill(:TERM, @pid)
-				end
-				
-				@thread.join
-				
-				# We are done with the notification pipe:
-				@input.close
-				@output.close
-			end
+			child.wait
 		end
+		
+		expect(child).to be_running
+		
+		task.stop
+		
+		expect(child).to_not be_running
 	end
 end
