@@ -23,20 +23,23 @@ require 'async/io/generic'
 module Async
 	module Process
 		class Child
-			def initialize(*args)
+			def initialize(*args, **options)
 				# Setup a cross-thread notification pipe - nio4r can't monitor pids unfortunately:
 				pipe = ::IO.pipe
 				@input = Async::IO::Generic.new(pipe.first)
 				@output = pipe.last
 				
 				@exit_status = nil
-				@pid = ::Process.spawn(*args)
+				
+				@pid = ::Process.spawn(*args, **options, pgroup: true)
 				
 				@thread = Thread.new do
 					_, @exit_status = ::Process.wait2(@pid)
 					@output.close
 				end
 			end
+			
+			attr :pid
 			
 			def running?
 				@exit_status.nil?
@@ -58,7 +61,7 @@ module Async
 			ensure
 				# If the user stops this task, we kill the process:
 				if @exit_status.nil?
-					::Process.kill(:TERM, @pid)
+					::Process.kill(:TERM, -@pid)
 				end
 				
 				@thread.join
