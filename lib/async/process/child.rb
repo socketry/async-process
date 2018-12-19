@@ -45,6 +45,10 @@ module Async
 				@exit_status.nil?
 			end
 			
+			def kill(signal = :TERM)
+				::Process.kill(signal, -@pid)
+			end
+			
 			def wait
 				if @exit_status.nil?
 					wait_thread
