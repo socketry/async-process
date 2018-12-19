@@ -61,7 +61,7 @@ module Async
 			ensure
 				# If the user stops this task, we kill the process:
 				if @exit_status.nil?
-					::Process.kill(:TERM, -@pid)
+					::Process.kill(:KILL, -@pid)
 				end
 				
 				@thread.join
