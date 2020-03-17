@@ -28,4 +28,10 @@ RSpec.describe Async::Process do
 		
 		expect(status).to be_success
 	end
+	
+	it "can capture output" do
+		output = described_class.capture("ls", "-lah")
+		
+		expect(output).to include("async-process")
+	end
 end

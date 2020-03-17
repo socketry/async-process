@@ -20,12 +20,14 @@
 
 require 'async/process/version'
 require 'async/process/child'
+
 require 'async/io'
+require 'kernel/sync'
 
 module Async
 	module Process
-		def self.spawn(*arguments)
-			Child.new(*arguments).wait
+		def self.spawn(*arguments, **options)
+			Child.new(*arguments, **options).wait
 		end
 		
 		def self.capture(*arguments, **options)
@@ -34,10 +36,11 @@ module Async
 			
 			runner = Async do
 				spawn(*arguments, **options)
+			ensure
 				output.close
 			end
 			
-			reader = Async do
+			Sync do
 				input.read
 			ensure
 				runner.wait
