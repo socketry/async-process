@@ -26,5 +26,20 @@ module Async
 		def self.spawn(*args)
 			Child.new(*args).wait
 		end
+
+    def self.capture(*args, **options)
+      r, w = ::Async::IO.pipe
+      options[:out] = w
+      runner = Async do
+        spawn(*args, **options)
+        w.close
+      end
+      reader = Async do
+        r.read
+      ensure
+        runner.wait
+        r.close
+      end
+    end
 	end
 end
