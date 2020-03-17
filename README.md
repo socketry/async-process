@@ -1,8 +1,8 @@
 # Async::Process
 
-Implements `Process.spawn` for [async].
+Implements `Process.spawn` and `Process.capture` for [async].
 
-[![Build Status](https://secure.travis-ci.org/socketry/async-process.svg)](http://travis-ci.org/socketry/async-process)
+[![Build Status](https://travis-ci.com/socketry/async-process.svg?branch=master)](https://travis-ci.com/socketry/async-process)
 [![Code Climate](https://codeclimate.com/github/socketry/async-process.svg)](https://codeclimate.com/github/socketry/async-process)
 [![Coverage Status](https://coveralls.io/repos/socketry/async-process/badge.svg)](https://coveralls.io/r/socketry/async-process)
 
@@ -48,9 +48,7 @@ Internally, we use a thread, since `nio4r` doesn't support monitoring pids.
 
 ## See Also
 
-- [async-io](https://github.com/socketry/async-io) — Asynchronous networking and sockets.
-- [async-dns](https://github.com/socketry/async-dns) — Asynchronous DNS resolver and server.
-- [async-rspec](https://github.com/socketry/async-rspec) — Shared contexts for running async specs.
+- [async-container](https://github.com/socketry/async-container) — Execute multiple isolated threads and/or processes.
 
 ## License
 
