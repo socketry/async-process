@@ -32,7 +32,7 @@ module Async
 		
 		def self.capture(*arguments, **options)
 			input, output = Async::IO.pipe
-			options[:out] = output
+			options[:out] = output.io
 			
 			runner = Async do
 				spawn(*arguments, **options)
