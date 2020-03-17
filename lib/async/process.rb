@@ -20,11 +20,29 @@
 
 require 'async/process/version'
 require 'async/process/child'
+require 'async/io'
 
 module Async
 	module Process
-		def self.spawn(*args)
-			Child.new(*args).wait
+		def self.spawn(*arguments)
+			Child.new(*arguments).wait
+		end
+		
+		def self.capture(*arguments, **options)
+			input, output = Async::IO.pipe
+			options[:out] = output
+			
+			runner = Async do
+				spawn(*arguments, **options)
+				output.close
+			end
+			
+			reader = Async do
+				input.read
+			ensure
+				runner.wait
+				input.close
+			end
 		end
 	end
 end
