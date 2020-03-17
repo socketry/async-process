@@ -20,6 +20,7 @@
 
 require 'async/process/version'
 require 'async/process/child'
+require 'async/io'
 
 module Async
 	module Process
