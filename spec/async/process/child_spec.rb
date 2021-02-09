@@ -36,6 +36,11 @@ RSpec.describe Async::Process::Child do
 		
 		task.stop
 		
+		10.times do
+			break unless child.running?
+			sleep(0.01)
+		end
+		
 		expect(child).to_not be_running
 	end
 end

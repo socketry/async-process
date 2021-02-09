@@ -1,34 +1,30 @@
 # Async::Process
 
-Implements `Process.spawn` and `Process.capture` for [async].
+Implements `Process.spawn` and `Process.capture` for [async](https://github.com/socketry/async).
 
-[![Build Status](https://travis-ci.com/socketry/async-process.svg?branch=master)](https://travis-ci.com/socketry/async-process)
-[![Code Climate](https://codeclimate.com/github/socketry/async-process.svg)](https://codeclimate.com/github/socketry/async-process)
-[![Coverage Status](https://coveralls.io/repos/socketry/async-process/badge.svg)](https://coveralls.io/r/socketry/async-process)
-
-[async]: https://github.com/socketry/async
+[![Development Status](https://github.com/socketry/async-process/workflows/Development/badge.svg)](https://github.com/socketry/async-process/actions?workflow=Development)
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-```ruby
+``` ruby
 gem 'async-process'
 ```
 
 And then execute:
 
-	$ bundle
+    $ bundle
 
 Or install it yourself as:
 
-	$ gem install async-process
+    $ gem install async-process
 
 ## Usage
 
 In any asynchronous context (e.g. a reactor), simply use the `Async::Process.spawn` rather than `Process.spawn` like so:
 
-```ruby
+``` ruby
 require 'async/process'
 
 Async::Reactor.run do
@@ -40,15 +36,15 @@ Internally, we use a thread, since `nio4r` doesn't support monitoring pids.
 
 ## Contributing
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+1.  Fork it
+2.  Create your feature branch (`git checkout -b my-new-feature`)
+3.  Commit your changes (`git commit -am 'Add some feature'`)
+4.  Push to the branch (`git push origin my-new-feature`)
+5.  Create new Pull Request
 
 ## See Also
 
-- [async-container](https://github.com/socketry/async-container) — Execute multiple isolated threads and/or processes.
+  - [async-container](https://github.com/socketry/async-container) — Execute multiple isolated threads and/or processes.
 
 ## License
 
