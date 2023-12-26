@@ -31,7 +31,13 @@ module Async
 				
 				@exit_status = nil
 				
-				@pid = ::Process.spawn(*args, **options, pgroup: true)
+				if Gem.win_platform?
+					options[:new_pgroup] = true
+				else
+					options[:pgroup] = true
+				end
+
+				@pid = ::Process.spawn(*args, **options)
 				
 				@thread = Thread.new do
 					_, @exit_status = ::Process.wait2(@pid)
