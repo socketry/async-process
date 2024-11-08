@@ -19,4 +19,7 @@ group :test do
 	gem "rubocop"
 	
 	gem "sus-fixtures-async"
+	
+	gem "bake-test"
+	gem "bake-test-external"
 end
