@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 require_relative "lib/async/process/version"
 
@@ -6,18 +7,21 @@ Gem::Specification.new do |spec|
 	spec.version = Async::Process::VERSION
 	
 	spec.summary = "Asynchronous process spawning."
-	spec.authors = ["Samuel Williams"]
+	spec.authors = ["Samuel Williams", "Joe Khoobyar"]
 	spec.license = "MIT"
+	
+	spec.cert_chain  = ["release.cert"]
+	spec.signing_key = File.expand_path("~/.gem/release.pem")
 	
 	spec.homepage = "https://github.com/socketry/async-process"
 	
-	spec.files = Dir.glob('{lib}/**/*', File::FNM_DOTMATCH, base: __dir__)
+	spec.metadata = {
+		"source_code_uri" => "https://github.com/socketry/async-process.git",
+	}
 	
-	spec.add_dependency "async"
-	spec.add_dependency "async-io"
+	spec.files = Dir.glob(["{lib}/**/*", "*.md"], File::FNM_DOTMATCH, base: __dir__)
 	
-	spec.add_development_dependency "async-rspec", "~> 1.1"
-	spec.add_development_dependency "bundler"
-	spec.add_development_dependency "covered"
-	spec.add_development_dependency "rspec", "~> 3.0"
+	spec.required_ruby_version = ">= 3.1"
+	
+	spec.add_dependency "async", "~> 2.0"
 end
