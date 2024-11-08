@@ -25,4 +25,21 @@ describe Async::Process::Child do
 		
 		expect(child).not.to be(:running?)
 	end
+	
+	with "#kill" do
+		it "can kill child process" do
+			child = subject.new("sleep 60")
+			
+			expect(child).to be(:running?)
+			
+			child.kill
+			
+			status = child.wait
+			
+			expect(child).not.to be(:running?)
+			
+			expect(status).to be_a(Process::Status)
+			expect(status).not.to be(:success?)
+		end
+	end
 end
